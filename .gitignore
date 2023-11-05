@@ -1,0 +1,7 @@
+/.idea
+/vendor
+*.log
+*.txt
+/tmp
+composer.lock
+.env
