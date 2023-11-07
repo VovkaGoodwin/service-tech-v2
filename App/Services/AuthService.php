@@ -31,7 +31,7 @@ class AuthService {
     $userRepository->updateUser($user);
 
 
-    return $token;
+    return $user;
   }
 
   private function getPasswordHash(string $password) {

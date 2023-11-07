@@ -36,6 +36,17 @@ class UserEntity {
     return (array) $this;
   }
 
+  public function getSafetyData() {
+    return [
+      'id' => $this->id,
+      'login' => $this->login,
+      'firstName' => $this->firstName,
+      'lastName' => $this->lastName,
+      'phone' => $this->phone,
+      'isAdmin' => $this->isAdmin,
+    ];
+  }
+
   /**
    * @param string $token
    */

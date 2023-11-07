@@ -9,7 +9,7 @@ use Slim\Exception\HttpBadRequestException;
 
 class AuthController {
 
-  public function logIn(ServerRequestInterface $req, ResponseInterface  $resp) {
+  public function logIn(ServerRequestInterface $req, ResponseInterface $resp) {
     $body = $req->getParsedBody();
 
     $login ??= $body['login'];
@@ -20,13 +20,18 @@ class AuthController {
     }
 
     $service = new AuthService();
-    $token = $service->login($login, $password);
+    $user = $service->login($login, $password);
 
-    if ($token === null) {
+    if ($user === null) {
       return $resp->withStatus(400);
     }
 
-    return $resp->withHeader('Authorization', "Bearer: {$token}");
+    $body = $resp->getBody();
+    $body->write(json_encode($user->getSafetyData()));
+
+    return $resp
+      ->withHeader('Authorization', "Bearer: {$user->token}")
+      ->withBody($body);
 
   }
 
