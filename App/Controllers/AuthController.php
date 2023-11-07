@@ -29,10 +29,8 @@ class AuthController {
     $body = $resp->getBody();
     $body->write(json_encode($user->getSafetyData()));
 
-    return $resp
-      ->withHeader('Authorization', "Bearer: {$user->token}")
-      ->withBody($body);
-
+    setcookie('Authorization', "Bearer {$user->token}", time() + (86400 * 5), '/');
+    return $resp->withBody($body);
   }
 
 }
