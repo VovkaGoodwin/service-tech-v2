@@ -20,9 +20,9 @@ class AuthService {
       'aud' => 'tomsk.zelenaya.net',
       'iat' => time(),
       'nbf' => time(),
-      'exp' => time() + (86400 * 5),
+      'exp' => time() + getenv('TOKEN_TTL'),
       'data' => [
-        'login' => $login
+        'user' => $user->getSafetyData()
       ]
     ];
 
