@@ -12,7 +12,8 @@
     "psr-4": {
       "Core\\": "Core",
       "App\\": "App"
-    }
+    },
+    "files": [ "Core/functions.php" ]
   },
   "scripts": {
     "dev": "php -S localhost:8000 -t public/"

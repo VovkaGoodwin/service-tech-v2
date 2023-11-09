@@ -3,11 +3,18 @@
 namespace App\Controllers;
 
 use App\Services\AuthService;
+use Core\Interfaces\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Exception\HttpBadRequestException;
 
 class AuthController {
+
+  private ContainerInterface $container;
+
+  public function __construct(ContainerInterface $container) {
+    $this->container = $container;
+  }
 
   public function logIn(ServerRequestInterface $req, ResponseInterface $resp) {
     $body = $req->getParsedBody();
@@ -29,7 +36,7 @@ class AuthController {
     $body = $resp->getBody();
     $body->write(json_encode($user->getSafetyData()));
 
-    setcookie('Authorization', "Bearer {$user->token}", time() + getenv('TOKEN_TTL'), '/');
+    setcookie('Authorization', "Bearer {$user->token}", time() + (int) env('TOKEN_TTL'), '/');
     return $resp->withBody($body);
   }
 
