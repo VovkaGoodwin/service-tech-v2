@@ -4,9 +4,11 @@ namespace Core\Traits;
 
 use App\Entities\UserEntity;
 use Core\Interfaces\ContainerInterface;
+use Rakit\Validation\Validator;
 
 /**
  * @property UserEntity currentUser
+ * @property Validator validator
 */
 trait ContainerTrait {
   private ContainerInterface $container;
@@ -16,9 +18,19 @@ trait ContainerTrait {
   }
 
   public function __get($name) {
-    if ($name === 'currentUser') {
-      return $this->container->get($name);
+    $property = $this->checkRegisteredClasses($name);
+    if ($this->container->has($property)) {
+      return $this->container->get($property);
     }
-    return $this->{$name};
+    return $this->{$property} ?? null;
+  }
+
+  private function checkRegisteredClasses($name) {
+    switch ($name) {
+      case 'validator':
+        $name = Validator::class;
+        break;
+    }
+    return $name;
   }
 }

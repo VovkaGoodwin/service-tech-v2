@@ -2,8 +2,10 @@
 
 namespace Core;
 
+use Core\Rules\BoolRule;
 use Dotenv\Dotenv;
 use MessagePack\BufferUnpacker;
+use Rakit\Validation\Validator;
 use Slim\Factory\AppFactory;
 use const ROUTES;
 final class App {
@@ -11,6 +13,7 @@ final class App {
 
   public function __construct() {
     $container = new Container();
+    $this->initContainer($container);
 
     $app = AppFactory::create(
       null,
@@ -24,6 +27,13 @@ final class App {
 
     $this->initEnv();
     $this->initMiddlewares();
+  }
+
+  public function initContainer(Container $container) {
+    $validator = new Validator();
+    $validator->addValidator('boolean', new BoolRule());
+
+    $container->set(\Rakit\Validation\Validator::class, $validator);
   }
 
   private function initEnv() {

@@ -24,10 +24,10 @@ class AuthMiddleware implements \Psr\Http\Server\MiddlewareInterface {
    * @inheritDoc
    */
   public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
-    $authHeader = $request->getHeaderLine('Authorization');
+    $authHeader = $request->getCookieParams()['Authorization'];
     sscanf($authHeader, 'Bearer %s', $token);
     try {
-      $paylodad = JWT::decode($token, JWT_KEY, [ 'HS256' ]);
+      $paylodad = JWT::decode($token, env('TOKEN_KEY'), [ 'HS256' ]);
     } catch (ExpiredException $e) {
       [,$bodyb64] = explode('.', $token);
       $paylodad = JWT::jsonDecode(JWT::urlsafeB64Decode($bodyb64));
