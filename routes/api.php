@@ -11,5 +11,12 @@ return function (\Slim\App $app) {
       $admin->post('/user', [C\UserController::class, 'createUser']);
       $admin->delete('/user/{id}', [C\UserController::class, 'deleteUser']);
     })->add(\Core\Middleware\AdminMiddleware::class);
+
+    $api->group('/switch', function (Group $switch) {
+      $switch->get('', [C\SwitchController::class, 'findSwitch']);
+      $switch->get('/state', [ C\SwitchController::class, 'rebootPort' ]);
+      $switch->get('/counters', [ C\SwitchController::class, 'clearCounters' ]);
+    });
+
   })->add(\Core\Middleware\AuthMiddleware::class);
 };
