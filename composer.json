@@ -7,7 +7,8 @@
     "guzzlehttp/guzzle": "7.3.0",
     "vlucas/phpdotenv": "v5.5.0",
     "ext-json": "*",
-    "rybakit/msgpack": "v0.9.1"
+    "rybakit/msgpack": "v0.9.1",
+    "rakit/validation": "v0.22.3"
   },
   "autoload": {
     "psr-4": {

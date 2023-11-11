@@ -8,6 +8,7 @@ use Core\Traits\MsgpackTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Rakit\Validation\Validator;
 use Slim\Psr7\Cookies;
 
 class AuthController {
@@ -22,15 +23,21 @@ class AuthController {
   public function logIn(ServerRequestInterface $req, ResponseInterface $resp) {
     $body = $req->getParsedBody();
 
-    $login ??= $body['login'];
-    $password ??= $body['password'];
 
-    if ($login === null || $password === null) {
+    $validator = new Validator();
+    $validated = $validator->validate($body, [
+      'login' => 'required|max:24',
+      'password' => 'required|max:25'
+    ]);
+
+    if ($validated->fails()) {
       return $resp->withStatus(StatusCodeInterface::STATUS_BAD_REQUEST);
     }
 
+    $data = $validated->getValidData();
+
     $service = new AuthService();
-    $user = $service->login($login, $password);
+    $user = $service->login($data['login'], $data['password']);
 
     if ($user === null) {
       return $resp->withStatus(StatusCodeInterface::STATUS_BAD_REQUEST);
