@@ -41,9 +41,9 @@ class AuthMiddleware implements \Psr\Http\Server\MiddlewareInterface {
       return $responseFactory->createResponse(StatusCodeInterface::STATUS_UNAUTHORIZED);
     }
 
-    $userRepository = new UserRepository();
-    $user = $userRepository->getUserById($paylodad->data->userId);
+    $user = (new UserRepository())->getUserById($paylodad->data->userId);
     $this->container->set('currentUser', $user);
+
 
     $response = $handler->handle($request);
 

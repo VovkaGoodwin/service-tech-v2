@@ -23,11 +23,13 @@ class UserRepository {
     file_put_contents(ROOT . '/users.txt', serialize($data));
   }
 
-  /**
-   * @throws UserNotFoundException
-   */
-  public function isUserExists($login, $password) {
-    return $this->getUserByCredentials($login, $password) !== null;
+  public function isUserExists($login, $firstName, $lastName) {
+    foreach ($this->users as $user) {
+      if ($user['login'] === $login && $user['firstName'] === $firstName && $user['lastName'] === $lastName) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
@@ -77,6 +79,13 @@ class UserRepository {
       }
     }
     return false;
+  }
+
+  public function createUser(UserEntity $user) {
+    $newId = ++$this->lastId;
+    $user->id = $newId;
+    $this->users[] = (array) $user;
+    return $newId;
   }
 
   public function userNotFound() {
