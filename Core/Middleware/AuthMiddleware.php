@@ -32,14 +32,13 @@ class AuthMiddleware implements \Psr\Http\Server\MiddlewareInterface {
       [,$bodyb64] = explode('.', $token);
       $paylodad = JWT::jsonDecode(JWT::urlsafeB64Decode($bodyb64));
       $needUpdateToken = $paylodad;
-
     } catch (UnexpectedValueException $e) {
       $paylodad = NULL;
     }
 
     if ($paylodad === null) {
       $responseFactory = new ResponseFactory();
-      return $responseFactory->createResponse(401);
+      return $responseFactory->createResponse(StatusCodeInterface::STATUS_UNAUTHORIZED);
     }
 
     $userRepository = new UserRepository();
