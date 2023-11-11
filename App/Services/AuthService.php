@@ -15,18 +15,7 @@ class AuthService {
       return null;
     }
 
-    $payload = [
-      'iss' => 'tomsk.zelenaya.net',
-      'aud' => 'tomsk.zelenaya.net',
-      'iat' => time(),
-      'nbf' => time(),
-      'exp' => time() + (int) env('TOKEN_TTL'),
-      'data' => [
-        'user' => $user->getSafetyData()
-      ]
-    ];
-
-    $token = JWT::encode($payload, JWT_KEY);
+    $token = $this->generateAccessToken($user->id);
     $user->setToken($token);
     $userRepository->updateUser($user);
 
@@ -34,7 +23,37 @@ class AuthService {
     return $user;
   }
 
+  public function generateAccessToken($userId) {
+    $payload = [
+      'iss' => 'tomsk.zelenaya.net',
+      'aud' => 'tomsk.zelenaya.net',
+      'iat' => time(),
+      'nbf' => time(),
+      'exp' => time() + (int) env('TOKEN_TTL'),
+      'data' => [
+        'userId' => $userId
+      ]
+    ];
+
+    return JWT::encode($payload, env('TOKEN_KEY'));
+  }
+
   private function getPasswordHash(string $password) {
     return base64_encode($password);
+  }
+
+  private function generateRefreshToken($userId) {
+    $payload = [
+      'iss' => 'tomsk.zelenaya.net',
+      'aud' => 'tomsk.zelenaya.net',
+      'iat' => time(),
+      'nbf' => time(),
+      'exp' => time() + (int) env('REFRESH_TOKEN_TTL'),
+      'data' => [
+        'userId' => $userId
+      ]
+    ];
+
+    return bin2hex(JWT::encode($payload, env('REFRESH_TOKEN_KEY')));
   }
 }

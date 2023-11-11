@@ -3,6 +3,7 @@
 namespace Core;
 
 use Dotenv\Dotenv;
+use MessagePack\BufferUnpacker;
 use Slim\Factory\AppFactory;
 use const ROUTES;
 final class App {
@@ -31,8 +32,15 @@ final class App {
   }
 
   private function initMiddlewares() {
+    $msgpackParser = static function ($input) {
+      $unpacker = new BufferUnpacker();
+
+      $unpacker->reset($input);
+      return $unpacker->unpack();
+    };
+
     $this->app->addRoutingMiddleware();
-    $this->app->addBodyParsingMiddleware();
+    $this->app->addBodyParsingMiddleware(['application/x-msgpack' => $msgpackParser]);
     $this->app->addErrorMiddleware(getenv('PRODUCTION'), true, true);
   }
 

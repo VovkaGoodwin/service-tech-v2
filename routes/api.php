@@ -7,5 +7,5 @@ return function (\Slim\App $app) {
 
   $app->group('/api', function (Group $api) {
 
-  });
+  })->add(\Core\Middleware\AuthMiddleware::class);
 };
