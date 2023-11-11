@@ -5,6 +5,8 @@ namespace Core\Middleware;
 use App\Repositories\UserRepository;
 use App\Services\AuthService;
 use Core\Interfaces\ContainerInterface;
+use Core\Traits\ContainerTrait;
+use Fig\Http\Message\StatusCodeInterface;
 use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
 use Psr\Http\Message\ResponseInterface;
@@ -16,11 +18,7 @@ use UnexpectedValueException;
 
 class AuthMiddleware implements \Psr\Http\Server\MiddlewareInterface {
 
-  private $container;
-
-  public function __construct(ContainerInterface $container) {
-    $this->container = $container;
-  }
+  use ContainerTrait;
 
   /**
    * @inheritDoc
