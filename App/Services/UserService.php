@@ -24,4 +24,10 @@ class UserService {
 
     return (bool) $repository->createUser($user);
   }
+
+  public function deleteUser($id) {
+    $repository = new UserRepository();
+    $repository->delete($id);
+    return true;
+  }
 }

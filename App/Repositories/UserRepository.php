@@ -88,6 +88,12 @@ class UserRepository {
     return $newId;
   }
 
+  public function delete($id) {
+    $this->users = array_filter($this->users, function ($user) use ($id) {
+      return $user['id'] != $id;
+    });
+  }
+
   public function userNotFound() {
     throw new UserNotFoundException();
   }

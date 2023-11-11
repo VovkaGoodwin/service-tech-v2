@@ -31,4 +31,12 @@ class UserController {
 
     return $response->withStatus(StatusCodeInterface::STATUS_CREATED);
   }
+
+  public function deleteUser(ServerRequestInterface $request, ResponseInterface $response, $args) {
+    ['id' => $userId] = $args;
+    $service = new UserService();
+    $service->deleteUser($userId);
+
+    return $response->withStatus(StatusCodeInterface::STATUS_NO_CONTENT);
+  }
 }
