@@ -57,6 +57,8 @@ class AuthMiddleware implements \Psr\Http\Server\MiddlewareInterface {
         'path' => '/',
         'httponly' => true
       ]);
+      $user->setToken($newToken);
+      (new UserRepository())->updateUser($user);
       $response = $response->withHeader('Set-Cookie', $cookie->toHeaders());
     }
 
