@@ -18,5 +18,9 @@ return function (\Slim\App $app) {
       $switch->get('/counters', [ C\SwitchController::class, 'clearCounters' ]);
     });
 
+    $api->group('/home', function (Group $home) {
+      $home->get('', [C\HomeController::class, 'findHome']);
+    });
+
   })->add(\Core\Middleware\AuthMiddleware::class);
 };

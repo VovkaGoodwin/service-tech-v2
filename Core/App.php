@@ -5,6 +5,7 @@ namespace Core;
 use Core\Rules\BoolRule;
 use Dotenv\Dotenv;
 use MessagePack\BufferUnpacker;
+use RedBeanPHP\R;
 use Rakit\Validation\Validator;
 use Slim\Factory\AppFactory;
 use const ROUTES;
@@ -27,13 +28,20 @@ final class App {
 
     $this->initEnv();
     $this->initMiddlewares();
+    $this->initDb();
   }
 
-  public function initContainer(Container $container) {
+  private function initContainer(Container $container) {
     $validator = new Validator();
     $validator->addValidator('boolean', new BoolRule());
 
     $container->set(\Rakit\Validation\Validator::class, $validator);
+  }
+
+  private function initDb() {
+    if (env('MODE') === 'prod') {
+      R::setup(env('DSN', ''), env('DB_USER', ''), env('DB_PASSWORD', ''));
+    }
   }
 
   private function initEnv() {
@@ -51,7 +59,7 @@ final class App {
 
     $this->app->addRoutingMiddleware();
     $this->app->addBodyParsingMiddleware(['application/x-msgpack' => $msgpackParser]);
-    $this->app->addErrorMiddleware(getenv('PRODUCTION'), true, true);
+    $this->app->addErrorMiddleware(getenv('MODE', 'dev') === 'dev', true, true);
   }
 
   public function run() {
