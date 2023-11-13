@@ -2,6 +2,6 @@
 /vendor
 *.log
 *.txt
-/tmp
+/tmp/*.txt
 composer.lock
 .env
