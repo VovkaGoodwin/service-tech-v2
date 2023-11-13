@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\UserRepository;
+use Core\Cache;
 use Core\Exceptions\UserNotFoundException;
 use Firebase\JWT\JWT;
 
@@ -35,7 +36,11 @@ class AuthService {
       ]
     ];
 
-    return JWT::encode($payload, env('TOKEN_KEY'));
+    $token = JWT::encode($payload, env('TOKEN_KEY'));
+    $cache = Cache::getInstance();
+    $cache->set($userId, $token, (int) env('TOKEN_TTL') + 3600);
+
+    return $token;
   }
 
   private function getPasswordHash(string $password) {

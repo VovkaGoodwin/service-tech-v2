@@ -4,6 +4,7 @@ namespace Core\Middleware;
 
 use App\Repositories\UserRepository;
 use App\Services\AuthService;
+use Core\Cache;
 use Core\Interfaces\ContainerInterface;
 use Core\Traits\ContainerTrait;
 use Fig\Http\Message\StatusCodeInterface;
@@ -36,7 +37,9 @@ class AuthMiddleware implements \Psr\Http\Server\MiddlewareInterface {
       $paylodad = NULL;
     }
 
-    if ($paylodad === null) {
+    $cache = Cache::getInstance();
+
+    if ($paylodad === null || $token != $cache->get($paylodad->data->userId)) {
       $responseFactory = new ResponseFactory();
       return $responseFactory->createResponse(StatusCodeInterface::STATUS_UNAUTHORIZED);
     }
