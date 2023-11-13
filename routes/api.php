@@ -22,5 +22,9 @@ return function (\Slim\App $app) {
       $home->get('', [C\HomeController::class, 'findHome']);
     });
 
+    $api->group('/tickets', function (Group $tickets) {
+      $tickets->get('', [C\TicketsController::class, 'getTickets']);
+    });
+
   })->add(\Core\Middleware\AuthMiddleware::class);
 };

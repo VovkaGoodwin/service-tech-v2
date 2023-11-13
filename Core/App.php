@@ -13,7 +13,7 @@ final class App {
   private \Slim\App $app;
 
   public function __construct() {
-    $container = new Container();
+    $container = Container::getInstance();
     $this->initContainer($container);
 
     $app = AppFactory::create(

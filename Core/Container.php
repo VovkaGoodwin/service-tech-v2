@@ -5,6 +5,11 @@ namespace Core;
 class Container implements \Core\Interfaces\ContainerInterface {
 
   private array $container = [];
+  private static $instance;
+
+  private function __construct() {
+
+  }
 
   /**
    * @inheritDoc
@@ -25,5 +30,12 @@ class Container implements \Core\Interfaces\ContainerInterface {
 
   public function set(string $key, $value) {
     $this->container[$key] = $value;
+  }
+
+  public static function getInstance() {
+    if (empty(self::$instance)) {
+      self::$instance = new self();
+    }
+    return self::$instance;
   }
 }
