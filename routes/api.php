@@ -5,6 +5,7 @@ use \App\Controllers as C;
 
 return function (\Slim\App $app) {
   $app->post('/login', [C\AuthController::class, 'logIn']);
+  $app->post('/logout', [C\AuthController::class, 'logOut']);
 
   $app->group('/api', function (Group $api) {
     $api->group('/admin', function (Group $admin) {

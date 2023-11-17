@@ -58,4 +58,15 @@ class AuthController {
     return $resp->withBody($body)->withHeader('Set-Cookie', $cookie->toHeaders());
   }
 
+  public function logOut(ServerRequestInterface $req, ResponseInterface $resp) {
+    $cookie = new Cookies();
+    $cookie->set('Authorization', [
+      'value' => '',
+      'expires' => time() - 1,
+    ]);
+    return $resp
+      ->withStatus(StatusCodeInterface::STATUS_NO_CONTENT)
+      ->withHeader('Set-Cookie', $cookie->toHeaders());
+  }
+
 }
