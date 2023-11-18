@@ -36,7 +36,8 @@ class AuthController {
 
     $data = $validated->getValidData();
 
-    $service = new AuthService();
+    /** @var AuthService $service */
+    $service = $this->container->make(AuthService::class);
     $user = $service->login($data['login'], $data['password']);
 
     if ($user === null) {
