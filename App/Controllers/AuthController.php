@@ -50,8 +50,8 @@ class AuthController {
     ]));
     $cookie = new Cookies();
     $cookie->set('Authorization', [
-      'value' => "Bearer {$user->token}",
-      'expires' => time() + (int) env('TOKEN_TTL'),
+      'value' => "Bearer {$user->getToken()}",
+      'expires' => time() + (int) env('TOKEN_TTL', 28800),
       'path' => '/',
       'httponly' => true
     ]);

@@ -53,4 +53,11 @@ class UserEntity {
   public function setToken(string $token) {
     $this->token = $token;
   }
+
+  /**
+   * @return string
+   */
+  public function getToken(): string {
+    return $this->token;
+  }
 }
