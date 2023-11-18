@@ -19,7 +19,8 @@
     "files": [ "Core/functions.php" ]
   },
   "scripts": {
-    "dev": "php -S localhost:8000 -t public/"
+    "dev": "php -S localhost:8000 -t public/",
+    "phpunit": "phpunit tests"
   },
   "config": {
     "process-timeout": 0

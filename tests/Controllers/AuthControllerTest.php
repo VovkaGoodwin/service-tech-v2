@@ -33,7 +33,7 @@ class AuthControllerTest extends TestCase {
     $this->controller = new AuthController($container);
   }
 
-  public function loginDataProvider (): array {
+  public static function loginDataProvider (): array {
     $userMock = \Mockery::mock(UserEntity::class);
     $userMock->shouldReceive('getSafetyData')->andReturn([
       'id' => 1,
