@@ -2,9 +2,12 @@
 
 namespace Core;
 
+use Core\Exceptions\ClassNotFoundException;
+
 class Container implements \Core\Interfaces\ContainerInterface {
 
   private array $container = [];
+  private array $registeredClasses = [];
   private static $instance;
 
   private function __construct() {
@@ -37,5 +40,25 @@ class Container implements \Core\Interfaces\ContainerInterface {
       self::$instance = new self();
     }
     return self::$instance;
+  }
+
+  public function register(array $classes) {
+    foreach ($classes as $className => $classImplementation) {
+      $this->registeredClasses[$className] = $classImplementation;
+    }
+  }
+
+  public function make($classString) {
+    if (!array_key_exists($classString, $this->registeredClasses)) {
+      throw new ClassNotFoundException();
+    }
+    $class = $this->registeredClasses[$classString];
+    if (is_callable($class)) {
+      return $class();
+    }
+    if (is_object($class)) {
+      return $class;
+    }
+    return new $class;
   }
 }
