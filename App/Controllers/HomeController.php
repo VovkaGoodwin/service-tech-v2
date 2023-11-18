@@ -23,9 +23,6 @@ class HomeController {
     $service = new HomeService();
     $homeAbons = $service->getHomeAbons($valid->getValue('street'), $valid->getValue('build'));
 
-    error_log(print_r($homeAbons, true));
-    error_log(print_r($this->encode($homeAbons), true));
-
     $body = $response->getBody();
     $body->write($this->encode($homeAbons));
 

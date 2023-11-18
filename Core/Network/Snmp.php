@@ -17,7 +17,6 @@ class Snmp {
   }
 
   public function set($ip, $object_id, $type, $value, $community = SET_COMM) {
-    error_log("snmp2_set('$ip', '$community', '$object_id', '$type', '$value')");
     snmp2_set($ip, $community, $object_id, $type, $value);
   }
 
