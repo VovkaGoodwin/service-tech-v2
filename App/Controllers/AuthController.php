@@ -48,10 +48,12 @@ class AuthController {
     $body->write($this->encode([
       'user' => $user->getSafetyData(),
     ]));
+    $dateTime = new \DateTime();
+    $dateTime->add(new \DateInterval('PT' . env('TOKEN_TTL',28800) . 'S'));
     $cookie = new Cookies();
     $cookie->set('Authorization', [
       'value' => "Bearer {$user->getToken()}",
-      'expires' => time() + (int) env('TOKEN_TTL', 28800),
+      'expires' => $dateTime->format('Y-m-d H:i'),
       'path' => '/',
       'httponly' => true
     ]);

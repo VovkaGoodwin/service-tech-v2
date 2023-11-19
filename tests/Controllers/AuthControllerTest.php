@@ -45,6 +45,9 @@ class AuthControllerTest extends TestCase {
     ]);
     $userMock->shouldReceive('getToken')->andReturn('authorization_token');
 
+    $dateTime = new \DateTime();
+    $dateTime->add(new \DateInterval('PT28800S'));
+
     return [
       [
         'inputData' => ['login' => 'vovka', 'password' => '123456'],
@@ -54,7 +57,7 @@ class AuthControllerTest extends TestCase {
         'expectedStatusCode' => StatusCodeInterface::STATUS_OK,
         'expectedCookie' => (new Cookies())->set('Authorization', [
           'value' => 'Bearer authorization_token',
-          'expires' => time() + 28800,
+          'expires' => (new \DateTime())->add(new \DateInterval('PT28800S'))->format('Y-m-d H:i'),
           'path' => '/',
           'httponly' => true
         ]),

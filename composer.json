@@ -20,7 +20,7 @@
   },
   "scripts": {
     "dev": "php -S localhost:8000 -t public/",
-    "phpunit": "phpunit tests"
+    "test": "phpunit tests"
   },
   "config": {
     "process-timeout": 0
