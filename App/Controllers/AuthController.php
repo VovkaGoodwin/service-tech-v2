@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Services\AuthService;
+use Core\BaseController;
 use Core\Interfaces\ContainerInterface;
 use Core\Traits\MsgpackTrait;
 use Fig\Http\Message\StatusCodeInterface;
@@ -11,21 +12,12 @@ use Psr\Http\Message\ResponseInterface;
 use Rakit\Validation\Validator;
 use Slim\Psr7\Cookies;
 
-class AuthController {
-
-  use MsgpackTrait;
-  private ContainerInterface $container;
-
-  public function __construct(ContainerInterface $container) {
-    $this->container = $container;
-  }
+class AuthController extends BaseController {
 
   public function logIn(ServerRequestInterface $req, ResponseInterface $resp) {
     $body = $req->getParsedBody();
 
-
-    $validator = new Validator();
-    $validated = $validator->validate($body, [
+    $validated = $this->validator->validate($body, [
       'login' => 'required|max:24',
       'password' => 'required|max:25'
     ]);
