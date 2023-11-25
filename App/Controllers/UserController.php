@@ -3,14 +3,15 @@
 namespace App\Controllers;
 
 use App\Services\UserService;
+use Core\BaseController;
 use Core\Traits\ContainerTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Rakit\Validation\Validator;
 
-class UserController {
-  use ContainerTrait;
+class UserController extends BaseController {
+
   public function createUser(ServerRequestInterface $request, ResponseInterface $response) {
     $body = $request->getParsedBody();
     $valid = $this->validator->validate($body, [
@@ -26,7 +27,7 @@ class UserController {
       return $response->withStatus(StatusCodeInterface::STATUS_BAD_REQUEST);
     }
 
-    $service = new UserService();
+    $service = $this->container->make(UserService::class);
     $service->createUser($valid->getValidData());
 
     return $response->withStatus(StatusCodeInterface::STATUS_CREATED);

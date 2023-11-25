@@ -8,6 +8,7 @@ class Container implements \Core\Interfaces\ContainerInterface {
 
   private array $container = [];
   private array $registeredClasses = [];
+  private array $madeInstances = [];
   private static $instance;
 
   private function __construct() {
@@ -48,17 +49,20 @@ class Container implements \Core\Interfaces\ContainerInterface {
     }
   }
 
-  public function make($classString) {
+  public function make($classString, $new = false) {
     if (!array_key_exists($classString, $this->registeredClasses)) {
       throw new ClassNotFoundException();
     }
+    
     $class = $this->registeredClasses[$classString];
     if (is_callable($class)) {
-      return $class();
+      $this->madeInstances[$classString] = $class();
+    } else if (is_object($class)) {
+      $this->madeInstances[$classString] = $class;
+    } else {
+      $this->madeInstances[$classString] = new $class;
     }
-    if (is_object($class)) {
-      return $class;
-    }
-    return new $class;
+
+    return $this->madeInstances[$classString];
   }
 }
