@@ -28,7 +28,6 @@ class AuthController extends BaseController {
 
     $data = $validated->getValidData();
 
-    /** @var AuthService $service */
     $service = $this->container->make(AuthService::class);
     $user = $service->login($data['login'], $data['password']);
 

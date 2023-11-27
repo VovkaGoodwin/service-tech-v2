@@ -4,6 +4,9 @@ namespace Core;
 
 use Core\Exceptions\ClassNotFoundException;
 
+/**
+ * @template T
+ */
 class Container implements \Core\Interfaces\ContainerInterface {
 
   private array $container = [];
@@ -49,7 +52,13 @@ class Container implements \Core\Interfaces\ContainerInterface {
     }
   }
 
-  public function make($classString, $new = false) {
+  /**
+   * @param $classString class-string<T>
+   * @param $new boolean
+   * @return T
+   * @throws ClassNotFoundException
+   */
+  public function make($classString, bool $new = false) {
     if (!array_key_exists($classString, $this->registeredClasses)) {
       throw new ClassNotFoundException();
     }
