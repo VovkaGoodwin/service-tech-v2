@@ -35,7 +35,7 @@ class UserController extends BaseController {
 
   public function deleteUser(ServerRequestInterface $request, ResponseInterface $response, $args) {
     ['id' => $userId] = $args;
-    $service = new UserService();
+    $service = $this->container->make(UserService::class);
     $service->deleteUser($userId);
 
     return $response->withStatus(StatusCodeInterface::STATUS_NO_CONTENT);

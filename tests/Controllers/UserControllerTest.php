@@ -84,7 +84,24 @@ class UserControllerTest extends TestCase {
     $this->assertSame($expectedStatusCode, $response->getStatusCode());
   }
 
-  public function testDeleteUser() {
+  public static function deleteUserDataProvider() {
+    return [
+      [
+        'inputData' => 1,
+        'mockBehavior' => function (MockInterface $mock) {
+          $mock->shouldReceive('deleteUser')->with(1);
+        },
+        'expectedStatusCode' => StatusCodeInterface::STATUS_NO_CONTENT
+      ]
+    ];
+  }
 
+  #[DataProvider('deleteUserDataProvider')]
+  public function testDeleteUser($inputData, $mockBehavior, $expectedStatusCode) {
+    $mockBehavior($this->mockService);
+
+    $response = $this->controller->deleteUser($this->request, $this->response, [ 'id' => $inputData ]);
+
+    $this->assertSame($expectedStatusCode, $response->getStatusCode());
   }
 }
