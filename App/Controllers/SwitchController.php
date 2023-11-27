@@ -3,14 +3,15 @@
 namespace App\Controllers;
 
 use App\Services\SwitchService;
+use Core\BaseController;
 use Core\Traits\ContainerTrait;
 use Core\Traits\MsgpackTrait;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class SwitchController {
-  use ContainerTrait, MsgpackTrait;
+class SwitchController extends BaseController {
+
   public function findSwitch(ServerRequestInterface $request, ResponseInterface $response) {
     $queryParams = $request->getQueryParams();
     $valid = $this->validator->validate($queryParams, [
@@ -22,7 +23,7 @@ class SwitchController {
       return $response->withStatus(StatusCodeInterface::STATUS_BAD_REQUEST);
     }
 
-    $service = new SwitchService();
+    $service = $this->container->make(SwitchService::class);
     if ($valid->getValue('port')) {
       $data = $service->findPort($valid->getValue('ip'), $valid->getValue('port'));
     } else {
@@ -45,7 +46,7 @@ class SwitchController {
       return $response->withStatus(StatusCodeInterface::STATUS_BAD_REQUEST);
     }
 
-    $service = new SwitchService();
+    $service = $this->container->make(SwitchService::class);
     $result = $service->rebootPort($valid->getValue('ip'), $valid->getValue('port'));
 
     return $response->withStatus($result ? StatusCodeInterface::STATUS_NO_CONTENT : StatusCodeInterface::STATUS_INTERNAL_SERVER_ERROR);
@@ -61,7 +62,7 @@ class SwitchController {
       return $response->withStatus(StatusCodeInterface::STATUS_BAD_REQUEST);
     }
 
-    $service = new SwitchService();
+    $service = $this->container->make(SwitchService::class);
     $result = $service->clearCounters($valid->getValue('ip'), $valid->getValue('port'));
 
     return $response->withStatus($result ? StatusCodeInterface::STATUS_NO_CONTENT : StatusCodeInterface::STATUS_INTERNAL_SERVER_ERROR);
